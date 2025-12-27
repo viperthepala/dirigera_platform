@@ -241,6 +241,38 @@ class ikea_motion_sensor(ikea_base_device_sensor, BinarySensorEntity):
     def is_on(self):
         return self._device.is_on or self._device.is_detected
 
+class ikea_occupancy_sensor_device(ikea_base_device):
+    def __init__(self,hass, hub, json_data):
+        logger.debug("ikea_occupancy_sensor_device ctor...")
+        super().__init__(hass, hub, json_data, hub.get_occupancy_sensor_by_id)
+        self.skip_update = True 
+        
+class ikea_occupancy_sensor(ikea_base_device_sensor, BinarySensorEntity):  
+    def __init__(self, device: ikea_occupancy_sensor_device):
+        logger.debug("ikea_occupancy_sensor ctor...")
+        # No suffix or name prefix for backward compatibility
+        super().__init__(device)
+   
+    @property
+    def is_on(self):
+        return self._device.is_on or self._device.is_detected
+    
+class ikea_light_sensor_device(ikea_base_device):
+    def __init__(self,hass, hub, json_data):
+        logger.debug("ikea_light_sensor_device ctor...")
+        super().__init__(hass, hub, json_data, hub.get_light_sensor_by_id)
+        self.skip_update = True 
+        
+class ikea_light_sensor(ikea_base_device_sensor, BinarySensorEntity):  
+    def __init__(self, device: ikea_light_sensor_device):
+        logger.debug("ikea_light_sensor ctor...")
+        # No suffix or name prefix for backward compatibility
+        super().__init__(device)
+   
+    @property
+    def is_on(self):
+        return self._device.is_on or self._device.is_detected
+
 class ikea_open_close_device(ikea_base_device):
     def __init__(self, hass, hub, json_data):
         logger.debug("ikea_motion_sensor_device ctor...")

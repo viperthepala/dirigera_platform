@@ -56,6 +56,8 @@ async def async_setup_entry(
     # Add battery sensors
     battery_sensors = []
     battery_sensors.extend([battery_percentage_sensor(x) for x in platform.motion_sensors])
+    battery_sensors.extend([battery_percentage_sensor(x) for x in platform.occupancy_sensors])
+    battery_sensors.extend([battery_percentage_sensor(x) for x in platform.light_sensors])
     battery_sensors.extend([battery_percentage_sensor(x) for x in platform.open_close_sensors])
     battery_sensors.extend([battery_percentage_sensor(x) for x in platform.water_sensors])
     battery_sensors.extend([battery_percentage_sensor(x) for x in platform.environment_sensors if getattr(x,"battery_percentage",None) is not None])

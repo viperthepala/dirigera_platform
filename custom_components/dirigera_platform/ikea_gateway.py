@@ -12,6 +12,8 @@ from .base_classes import (
     ikea_controller_device,
     ikea_open_close_device, 
     ikea_motion_sensor_device, 
+    ikea_occupancy_sensor_device, 
+    ikea_light_sensor_device, 
     ikea_water_sensor_device    
 )
 
@@ -30,6 +32,8 @@ class HubDeviceType(Enum):
     CONTROLLER          = "controller"
     OPEN_CLOSE_SENSOR   = "open_close"
     MOTION_SENSOR       = "motion_sensor"
+    OCCUPANCY_SENSOR    = "occupancy_sensor"
+    LIGHT_SENSOR        = "light_sensor"
     WATER_SENSOR        = "water_sensor"
 
 class ikea_gateway:
@@ -97,6 +101,16 @@ class ikea_gateway:
         motion_sensors = await hass.async_add_executor_job(hub.get_motion_sensors)
         logger.debug(f"Found {len(motion_sensors)} total of all motion_sensors devices to setup...")
         self.devices[HubDeviceType.MOTION_SENSOR] = [ikea_motion_sensor_device(hass, hub, x) for x in motion_sensors]
+
+        #Occupancy Sensors
+        occupancy_sensors = await hass.async_add_executor_job(hub.get_occupancy_sensors)
+        logger.debug(f"Found {len(occupancy_sensors)} total of all occupancy_sensors devices to setup...")
+        self.devices[HubDeviceType.OCCUPANCY_SENSOR] = [ikea_occupancy_sensor_device(hass, hub, x) for x in occupancy_sensors]
+
+        #Light Sensors
+        light_sensors = await hass.async_add_executor_job(hub.get_light_sensors)
+        logger.debug(f"Found {len(light_sensors)} total of all light_sensors devices to setup...")
+        self.devices[HubDeviceType.LIGHT_SENSOR] = [ikea_light_sensor_device(hass, hub, x) for x in light_sensors]
         
         #Water Sensors
         water_sensors = await hass.async_add_executor_job(hub.get_water_sensors)
@@ -147,6 +161,14 @@ class ikea_gateway:
     @property
     def motion_sensors(self):
         return self.get_devices(HubDeviceType.MOTION_SENSOR)
+
+    @property
+    def occupancy_sensors(self):
+        return self.get_devices(HubDeviceType.OCCUPANCY_SENSOR)
+    
+    @property
+    def light_sensors(self):
+        return self.get_devices(HubDeviceType.LIGHT_SENSOR)
     
     @property
     def water_sensors(self):
