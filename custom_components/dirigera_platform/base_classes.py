@@ -264,26 +264,27 @@ class ikea_light_sensor_device(ikea_base_device):
         self.skip_update = True 
         
 class ikea_light_sensor(ikea_base_device_sensor, SensorEntity):  
-    def __init__(self, device: ikea_occupancy_sensor_device):
+    def __init__(self, device: ikea_light_sensor_device):
         logger.debug("ikea_occupancy_sensor ctor...")
         # No suffix or name prefix for backward compatibility
         super().__init__(device)
 
     @property
     def native_value(self):
-        """Current illuminance (lx)."""
         return float(self._device.illuminance)
+    
+    @property
+    def native_unit_of_measurement(self) -> str:
+        return "lx"
 
     @property
-    def extra_state_attributes(self):
-        """Expose min/max illuminance as extra attributes."""
-        attrs = {}
-        if getattr(self._device, "min_illuminance", None) is not None:
-            attrs["min_illuminance"] = float(self._device.min_illuminance)
-        if getattr(self._device, "max_illuminance", None) is not None:
-            attrs["max_illuminance"] = float(self._device.max_illuminance)
-        return attrs
-
+    def min_illuminance(self):
+        return float(self._device.min_illuminance)
+    
+    @property
+    def max_illuminance(self):
+        return float(self._device.max_illuminance)
+        
 class ikea_open_close_device(ikea_base_device):
     def __init__(self, hass, hub, json_data):
         logger.debug("ikea_motion_sensor_device ctor...")
