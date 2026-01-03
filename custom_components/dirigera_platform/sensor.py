@@ -23,7 +23,7 @@ from .base_classes import (
 from .ikea_gateway import ikea_gateway
 
 from homeassistant import config_entries, core
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
 from homeassistant.const import CONF_IP_ADDRESS, CONF_TOKEN
 from homeassistant.core import HomeAssistantError
 from homeassistant.helpers.entity import EntityCategory
@@ -52,6 +52,7 @@ async def async_setup_entry(
 
     await add_controllers_sensors(hass, async_add_entities, hub, platform.controllers)
     await add_environment_sensors(async_add_entities, platform.environment_sensors)
+    await add_light_sensors(async_add_entities, platform.light_sensors)   
     await add_outlet_power_attrs(async_add_entities, platform.outlets)
 
     # Add battery sensors
@@ -156,6 +157,15 @@ async def add_air_purifier_sensors(async_add_entities, air_purifiers):
         )
 
     async_add_entities(air_purifier_entities)
+
+async def add_light_sensors(async_add_entities, light_devices):
+    entities = []
+
+    for device in light_devices:
+        if getattr(device, "illuminance", None) is not None:
+            entities.append(ikea_light_sensor(device))
+
+    async_add_entities(entities)
 
 async def add_controllers_sensors(hass, async_add_entities, hub, controllers):
     logger.debug("Starting to add controller sensors...")
