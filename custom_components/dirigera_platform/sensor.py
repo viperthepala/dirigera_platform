@@ -165,8 +165,6 @@ async def add_light_sensors(async_add_entities, light_devices):
         if getattr(device, "illuminance", None) is not None:
             entities.append(ikea_light_sensor(device))
 
-            
-
     async_add_entities(entities)
 
 async def add_controllers_sensors(hass, async_add_entities, hub, controllers):

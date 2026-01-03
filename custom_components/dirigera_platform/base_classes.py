@@ -276,14 +276,6 @@ class ikea_light_sensor(ikea_base_device_sensor, SensorEntity):
     @property
     def native_unit_of_measurement(self) -> str:
         return "lx"
-
-    @property
-    def min_illuminance(self):
-        return float(self._device.min_illuminance)
-    
-    @property
-    def max_illuminance(self):
-        return float(self._device.max_illuminance)
         
 class ikea_open_close_device(ikea_base_device):
     def __init__(self, hass, hub, json_data):
