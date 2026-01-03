@@ -17,7 +17,8 @@ from .base_classes import (
     energy_consumed_at_last_reset_sensor ,
     total_energy_consumed_last_updated_sensor,
     total_energy_consumed_sensor,
-    time_of_last_energy_reset_sensor
+    time_of_last_energy_reset_sensor,
+    ikea_light_sensor
 )
 from .ikea_gateway import ikea_gateway
 
