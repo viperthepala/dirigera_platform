@@ -255,7 +255,7 @@ class ikea_occupancy_sensor(ikea_base_device_sensor, BinarySensorEntity):
    
     @property
     def is_on(self):
-        return self._device.is_on or self._device.is_detected
+        return self._device.is_detected
     
 class ikea_light_sensor_device(ikea_base_device):
     def __init__(self,hass, hub, json_data):
@@ -270,8 +270,15 @@ class ikea_light_sensor(ikea_base_device_sensor, BinarySensorEntity):
         super().__init__(device)
    
     @property
-    def is_on(self):
-        return self._device.is_on or self._device.is_detected
+    def native_value(self):
+        return self._data["illuminance"]
+
+    @property
+    def extra_state_attributes(self):
+        return {
+            "min_illuminance": self._data["min_illuminance"],
+            "max_illuminance": self._data["max_illuminance"],
+        }
 
 class ikea_open_close_device(ikea_base_device):
     def __init__(self, hass, hub, json_data):
